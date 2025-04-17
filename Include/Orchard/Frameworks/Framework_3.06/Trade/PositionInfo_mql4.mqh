@@ -69,4 +69,26 @@ class CPositionInfoCustom : public CPositionInfo {
 
 public:
    int Total() { return ( OrdersTotal() ); }
+   int Count( const string symbol, int magic_number );
+};
+
+int CPositionInfo::Count(string symbol, int magic_number)
+{
+   int positionCount = 0; // Counter for positions
+   
+   // Loop through all open orders
+   for(int i = OrdersTotal() - 1; i >= 0; i--)
+   {
+      // Select order by position
+      if(OrderSelect(i, SELECT_BY_POS, MODE_TRADES))
+      {
+         // Check if order matches symbol and magic number
+         if(OrderSymbol() == symbol && OrderMagicNumber() == magic_number)
+         {
+            positionCount++;
+         }
+      }
+   }
+   
+   return(positionCount);
 };

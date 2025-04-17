@@ -36,4 +36,25 @@ class CPositionInfoCustom : public CPositionInfo {
 
 public:
    int Total() { return ( PositionsTotal() ); }
+   int Count( const string symbol, int magic_number );
+};
+
+int CPositionInfoCustom::Count( const string symbol, int magic_number  ) {
+   CPositionInfo positionInfo; // Create an instance of CPositionInfo
+   int positionCount = 0; // Counter for positions on the current symbol
+   // Loop through all open positions
+   for(int i = PositionsTotal() - 1; i >= 0; i--)
+   {
+      // Select position by index
+      ulong ticket = PositionGetTicket(i);
+      if(positionInfo.SelectByTicket(ticket))
+      {
+         // Check if the position is for the current symbol
+         if(positionInfo.Symbol() == symbol && positionInfo.Magic() == magic_number)
+         {
+            positionCount++;
+         }
+      }
+   }
+   return (positionCount);
 };
